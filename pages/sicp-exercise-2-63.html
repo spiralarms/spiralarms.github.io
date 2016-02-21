@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>voom & zoom</title>
+	<meta name="description" content="">
+	<meta name="author" content="voom4000">
+
+	<!-- HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="../theme/html5.js"></script>
+	<![endif]-->
+
+	<!-- Styles -->
+	<link href="../theme/bootstrap.min.css" rel="stylesheet">
+	<link href="../theme/local.css" rel="stylesheet">
+	<link href="../theme/pygments.css" rel="stylesheet">
+
+	<!-- Feeds -->
+
+
+
+
+</head>
+<body>
+	<div class="topbar">
+	  <div class="topbar-inner">
+		<div class="container-fluid">
+		  <a class="brand" href="../">voom & zoom</a>
+			<ul class="nav">
+			</ul>
+			<p class="pull-right"><a href="../archives.html">[archives]</a> <a href="../tags.html">[tags]</a></p>
+		</div>
+	  </div>
+	</div>
+
+	<div class="container-fluid">
+	  <div class="sidebar">
+		<div class="well">
+			<h3>Blogroll</h3>
+			<ul>
+				<li><a href="pages/sicp-solutions.html">SICP Solutions</a></li>
+			</ul>
+			<div class="social">
+			<h3>Social</h3>
+			<ul>
+				<li><a href="#">Weiqun Zhang</a></li>
+				<li><a href="#">Other wannabe</a></li>
+			</ul>
+			</div>
+		</div>
+	  </div>
+	  <div class="content">
+	<div class='page'>
+		<div class="page-header"><h1>SICP Exercise 2.63</h1></div>
+		<div><p>Code</p>
+<div class="highlight"><pre><span class="o">#</span><span class="nv">lang</span> <span class="nv">racket</span>
+
+<span class="c1">; set as binary tree</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">entry</span> <span class="nv">tree</span><span class="p">)</span> <span class="p">(</span><span class="nb">car </span><span class="nv">tree</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">left-branch</span> <span class="nv">tree</span><span class="p">)</span> <span class="p">(</span><span class="nb">cadr </span><span class="nv">tree</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">right-branch</span> <span class="nv">tree</span><span class="p">)</span> <span class="p">(</span><span class="nb">caddr </span><span class="nv">tree</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">make-tree</span> <span class="nv">entry</span> <span class="nv">left</span> <span class="nv">right</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">list </span><span class="nv">entry</span> <span class="nv">left</span> <span class="nv">right</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">adjoin-set</span> <span class="nv">x</span> <span class="nv">set</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">null? </span><span class="nv">set</span><span class="p">)</span> <span class="p">(</span><span class="nf">make-tree</span> <span class="nv">x</span> <span class="o">&#39;</span><span class="p">()</span> <span class="o">&#39;</span><span class="p">()))</span>
+        <span class="p">((</span><span class="nb">= </span><span class="nv">x</span> <span class="p">(</span><span class="nf">entry</span> <span class="nv">set</span><span class="p">))</span> <span class="nv">set</span><span class="p">)</span>
+        <span class="p">((</span><span class="nb">&lt; </span><span class="nv">x</span> <span class="p">(</span><span class="nf">entry</span> <span class="nv">set</span><span class="p">))</span>
+         <span class="p">(</span><span class="nf">make-tree</span> <span class="p">(</span><span class="nf">entry</span> <span class="nv">set</span><span class="p">)</span> 
+                    <span class="p">(</span><span class="nf">adjoin-set</span> <span class="nv">x</span> <span class="p">(</span><span class="nf">left-branch</span> <span class="nv">set</span><span class="p">))</span>
+                    <span class="p">(</span><span class="nf">right-branch</span> <span class="nv">set</span><span class="p">)))</span>
+        <span class="p">((</span><span class="nb">&gt; </span><span class="nv">x</span> <span class="p">(</span><span class="nf">entry</span> <span class="nv">set</span><span class="p">))</span>
+         <span class="p">(</span><span class="nf">make-tree</span> <span class="p">(</span><span class="nf">entry</span> <span class="nv">set</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">left-branch</span> <span class="nv">set</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">adjoin-set</span> <span class="nv">x</span> <span class="p">(</span><span class="nf">right-branch</span> <span class="nv">set</span><span class="p">))))))</span>
+
+
+<span class="c1">; converters</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">tree-&gt;list-1</span> <span class="nv">tree</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">null? </span><span class="nv">tree</span><span class="p">)</span>
+      <span class="o">&#39;</span><span class="p">()</span>
+      <span class="p">(</span><span class="nb">append </span><span class="p">(</span><span class="nf">tree-&gt;list-1</span> <span class="p">(</span><span class="nf">left-branch</span> <span class="nv">tree</span><span class="p">))</span>
+              <span class="p">(</span><span class="nb">cons </span><span class="p">(</span><span class="nf">entry</span> <span class="nv">tree</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">tree-&gt;list-1</span> <span class="p">(</span><span class="nf">right-branch</span> <span class="nv">tree</span><span class="p">))))))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">tree-&gt;list-2</span> <span class="nv">tree</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">copy-to-list</span> <span class="nv">tree</span> <span class="nv">result-list</span><span class="p">)</span>
+    <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">null? </span><span class="nv">tree</span><span class="p">)</span>
+        <span class="nv">result-list</span>
+        <span class="p">(</span><span class="nf">copy-to-list</span> <span class="p">(</span><span class="nf">left-branch</span> <span class="nv">tree</span><span class="p">)</span>
+                      <span class="p">(</span><span class="nb">cons </span><span class="p">(</span><span class="nf">entry</span> <span class="nv">tree</span><span class="p">)</span>
+                            <span class="p">(</span><span class="nf">copy-to-list</span> <span class="p">(</span><span class="nf">right-branch</span> <span class="nv">tree</span><span class="p">)</span>
+                                          <span class="nv">result-list</span><span class="p">)))))</span>
+  <span class="p">(</span><span class="nf">copy-to-list</span> <span class="nv">tree</span> <span class="o">&#39;</span><span class="p">()))</span>
+
+<span class="c1">; tests</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">adjoin-list-set</span> <span class="nv">xlist</span> <span class="nv">set</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">iter</span> <span class="nv">xlist</span> <span class="nv">set</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">null? </span><span class="nv">xlist</span><span class="p">)</span>
+      <span class="nv">set</span>
+      <span class="p">(</span><span class="nf">iter</span> <span class="p">(</span><span class="nb">cdr </span><span class="nv">xlist</span><span class="p">)</span> <span class="p">(</span><span class="nf">adjoin-set</span> <span class="p">(</span><span class="nb">car </span><span class="nv">xlist</span><span class="p">)</span> <span class="nv">set</span><span class="p">))))</span>
+    <span class="p">(</span><span class="nf">iter</span> <span class="p">(</span><span class="nb">reverse </span><span class="nv">xlist</span><span class="p">)</span> <span class="nv">set</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="nv">tree1</span> <span class="p">(</span><span class="nf">adjoin-list-set</span> <span class="o">&#39;</span><span class="p">(</span><span class="mi">1</span> <span class="mi">5</span> <span class="mi">11</span> <span class="mi">3</span> <span class="mi">9</span> <span class="mi">7</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">()))</span>
+<span class="p">(</span><span class="k">define </span><span class="nv">tree2</span> <span class="p">(</span><span class="nf">adjoin-list-set</span> <span class="o">&#39;</span><span class="p">(</span><span class="mi">11</span> <span class="mi">5</span> <span class="mi">9</span> <span class="mi">1</span> <span class="mi">7</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">()))</span>
+<span class="p">(</span><span class="k">define </span><span class="nv">tree3</span> <span class="p">(</span><span class="nf">adjoin-list-set</span> <span class="o">&#39;</span><span class="p">(</span><span class="mi">1</span> <span class="mi">7</span> <span class="mi">11</span> <span class="mi">3</span> <span class="mi">9</span> <span class="mi">5</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">()))</span>
+
+<span class="p">(</span><span class="nf">tree-&gt;list-1</span> <span class="nv">tree1</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">tree-&gt;list-1</span> <span class="nv">tree2</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">tree-&gt;list-1</span> <span class="nv">tree3</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">tree-&gt;list-2</span> <span class="nv">tree1</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">tree-&gt;list-2</span> <span class="nv">tree2</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">tree-&gt;list-2</span> <span class="nv">tree3</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Output</p>
+<div class="highlight"><pre>&#39;(1 3 5 7 9 11)
+&#39;(1 3 5 7 9 11)
+&#39;(1 3 5 7 9 11)
+&#39;(1 3 5 7 9 11)
+&#39;(1 3 5 7 9 11)
+&#39;(1 3 5 7 9 11)
+</pre></div>
+
+
+<p>Procedures produce the same results for every tree, namely sorted lists</p>
+<p><code>tree-&gt;list-2</code></p>
+<p>Time ~ <span class="math">\(O(m)\)</span>, where <span class="math">\(m\)</span> - the number of all nodes <span class="math">\(n\)</span> plus the number of empty leaves.
+For full binary tree: <span class="math">\(n=2^{h}-1\)</span>; <span class="math">\(m=2^{h+1}-1\)</span>, <span class="math">\(h\)</span> - the height of the tree.</p>
+<p><code>tree-&gt;list-1</code></p>
+<p>It takes more time because of <code>append</code> for every left branch. Suppose that for <code>append</code>
+time ~ <span class="math">\(O(k)\)</span> for a list of size <span class="math">\(k\)</span>. Total number of nodes in ALL left branches
+is <span class="math">\(\sum_{i=1}^{h}(2^{i}-1)=2^{h+1}-1-h\)</span>. So time ~ <span class="math">\(O(m)\)</span> for both
+procedures, but the actual time is larger for <code>tree-&gt;list-1</code>.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+    
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' && location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript'; 
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script></div>
+	</div>
+		<footer>
+		  <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme based on <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>.</p>
+		  <p>&copy; voom4000</p>
+		</footer>
+	  </div>
+
+	</div>
+</body>
+</html>

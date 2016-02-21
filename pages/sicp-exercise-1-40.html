@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>voom & zoom</title>
+	<meta name="description" content="">
+	<meta name="author" content="voom4000">
+
+	<!-- HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="../theme/html5.js"></script>
+	<![endif]-->
+
+	<!-- Styles -->
+	<link href="../theme/bootstrap.min.css" rel="stylesheet">
+	<link href="../theme/local.css" rel="stylesheet">
+	<link href="../theme/pygments.css" rel="stylesheet">
+
+	<!-- Feeds -->
+
+
+
+
+</head>
+<body>
+	<div class="topbar">
+	  <div class="topbar-inner">
+		<div class="container-fluid">
+		  <a class="brand" href="../">voom & zoom</a>
+			<ul class="nav">
+			</ul>
+			<p class="pull-right"><a href="../archives.html">[archives]</a> <a href="../tags.html">[tags]</a></p>
+		</div>
+	  </div>
+	</div>
+
+	<div class="container-fluid">
+	  <div class="sidebar">
+		<div class="well">
+			<h3>Blogroll</h3>
+			<ul>
+				<li><a href="pages/sicp-solutions.html">SICP Solutions</a></li>
+			</ul>
+			<div class="social">
+			<h3>Social</h3>
+			<ul>
+				<li><a href="#">Weiqun Zhang</a></li>
+				<li><a href="#">Other wannabe</a></li>
+			</ul>
+			</div>
+		</div>
+	  </div>
+	  <div class="content">
+	<div class='page'>
+		<div class="page-header"><h1>SICP Exercise 1.40</h1></div>
+		<div><p>Code</p>
+<div class="highlight"><pre><span class="o">#</span><span class="nv">lang</span> <span class="nv">racket</span>
+
+<span class="p">(</span><span class="nf">require</span> <span class="s">&quot;common.scm&quot;</span><span class="p">)</span>
+
+<span class="c1">;; Fixed points</span>
+
+<span class="p">(</span><span class="k">define </span><span class="nv">tolerance</span> <span class="mf">0.00001</span><span class="p">)</span>
+<span class="p">(</span><span class="k">define </span><span class="nv">dx</span> <span class="nv">tolerance</span><span class="p">)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fixed-point</span> <span class="nv">f</span> <span class="nv">first-guess</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">close-enough?</span> <span class="nv">v1</span> <span class="nv">v2</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nb">abs </span><span class="p">(</span><span class="nb">- </span><span class="nv">v1</span> <span class="nv">v2</span><span class="p">))</span> <span class="nv">tolerance</span><span class="p">))</span>
+  <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">try</span> <span class="nv">guess</span><span class="p">)</span>
+    <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">next</span> <span class="p">(</span><span class="nf">f</span> <span class="nv">guess</span><span class="p">)))</span>
+      <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">close-enough?</span> <span class="nv">guess</span> <span class="nv">next</span><span class="p">)</span>
+          <span class="nv">next</span>
+          <span class="p">(</span><span class="nf">try</span> <span class="nv">next</span><span class="p">))))</span>
+  <span class="p">(</span><span class="nf">try</span> <span class="nv">first-guess</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">deriv</span> <span class="nv">g</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">- </span><span class="p">(</span><span class="nf">g</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">x</span> <span class="nv">dx</span><span class="p">))</span> <span class="p">(</span><span class="nf">g</span> <span class="nv">x</span><span class="p">))</span> <span class="nv">dx</span> <span class="p">)))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">newton-transform</span> <span class="nv">g</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">- </span><span class="nv">x</span> <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nf">g</span> <span class="nv">x</span><span class="p">)</span> <span class="p">((</span><span class="nf">deriv</span> <span class="nv">g</span><span class="p">)</span> <span class="nv">x</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">newtons-method</span> <span class="nv">g</span> <span class="nv">guess</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">fixed-point</span> <span class="p">(</span><span class="nf">newton-transform</span> <span class="nv">g</span><span class="p">)</span> <span class="nv">guess</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nb">sqrt </span><span class="nv">x</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">newtons-method</span>
+   <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">y</span><span class="p">)</span> <span class="p">(</span><span class="nb">- </span><span class="p">(</span><span class="nf">square</span> <span class="nv">y</span><span class="p">)</span> <span class="nv">x</span><span class="p">))</span> <span class="mf">1.0</span><span class="p">))</span>
+
+<span class="c1">; the resulting value is a fixed point of the transformed function</span>
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fixed-point-of-transform</span> <span class="nv">g</span> <span class="nv">transform</span> <span class="nv">guess</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">fixed-point</span> <span class="p">(</span><span class="nf">transform</span> <span class="nv">g</span><span class="p">)</span> <span class="nv">guess</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">tsqrt</span> <span class="nv">x</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">fixed-point-of-transform</span>
+   <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">y</span><span class="p">)</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">x</span> <span class="nv">y</span><span class="p">))</span>
+   <span class="nv">average-damp</span>
+   <span class="mf">1.0</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">nsqrt</span> <span class="nv">x</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">fixed-point-of-transform</span>
+   <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">y</span><span class="p">)</span> <span class="p">(</span><span class="nb">- </span><span class="p">(</span><span class="nf">square</span> <span class="nv">y</span><span class="p">)</span> <span class="nv">x</span><span class="p">))</span> <span class="nv">newton-transform</span> <span class="mf">1.0</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">cubic</span> <span class="nv">a</span> <span class="nv">b</span> <span class="nv">c</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">x</span><span class="p">)</span> <span class="p">(</span><span class="nf">+</span>
+               <span class="p">(</span><span class="nf">cube</span> <span class="nv">x</span><span class="p">)</span>
+               <span class="p">(</span><span class="nb">* </span><span class="nv">a</span> <span class="p">(</span><span class="nf">square</span> <span class="nv">x</span><span class="p">))</span>
+               <span class="p">(</span><span class="nb">* </span><span class="nv">b</span> <span class="nv">x</span><span class="p">)</span>
+               <span class="nv">c</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nf">newtons-method</span> <span class="p">(</span><span class="nf">cubic</span> <span class="mi">1</span> <span class="mi">-10</span> <span class="mi">1</span><span class="p">)</span> <span class="mi">50</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">newtons-method</span> <span class="p">(</span><span class="nf">cubic</span> <span class="mi">1</span> <span class="mi">-10</span> <span class="mi">1</span><span class="p">)</span> <span class="mi">10</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">newtons-method</span> <span class="p">(</span><span class="nf">cubic</span> <span class="mi">1</span> <span class="mi">-10</span> <span class="mi">1</span><span class="p">)</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">newtons-method</span> <span class="p">(</span><span class="nf">cubic</span> <span class="mi">1</span> <span class="mi">-10</span> <span class="mi">1</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">newtons-method</span> <span class="p">(</span><span class="nf">cubic</span> <span class="mi">1</span> <span class="mi">-10</span> <span class="mi">1</span><span class="p">)</span> <span class="mi">-10</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">newtons-method</span> <span class="p">(</span><span class="nf">cubic</span> <span class="mi">1</span> <span class="mi">-10</span> <span class="mi">1</span><span class="p">)</span> <span class="mi">-50</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Output</p>
+<div class="highlight"><pre>2.641891682727518
+2.6418916827276204
+0.10112606446853241
+0.10112606447108206
+-3.7430177471902093
+-3.7430177471853097
+</pre></div></div>
+	</div>
+		<footer>
+		  <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme based on <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>.</p>
+		  <p>&copy; voom4000</p>
+		</footer>
+	  </div>
+
+	</div>
+</body>
+</html>

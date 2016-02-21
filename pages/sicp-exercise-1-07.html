@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>voom & zoom</title>
+	<meta name="description" content="">
+	<meta name="author" content="voom4000">
+
+	<!-- HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="../theme/html5.js"></script>
+	<![endif]-->
+
+	<!-- Styles -->
+	<link href="../theme/bootstrap.min.css" rel="stylesheet">
+	<link href="../theme/local.css" rel="stylesheet">
+	<link href="../theme/pygments.css" rel="stylesheet">
+
+	<!-- Feeds -->
+
+
+
+
+</head>
+<body>
+	<div class="topbar">
+	  <div class="topbar-inner">
+		<div class="container-fluid">
+		  <a class="brand" href="../">voom & zoom</a>
+			<ul class="nav">
+			</ul>
+			<p class="pull-right"><a href="../archives.html">[archives]</a> <a href="../tags.html">[tags]</a></p>
+		</div>
+	  </div>
+	</div>
+
+	<div class="container-fluid">
+	  <div class="sidebar">
+		<div class="well">
+			<h3>Blogroll</h3>
+			<ul>
+				<li><a href="pages/sicp-solutions.html">SICP Solutions</a></li>
+			</ul>
+			<div class="social">
+			<h3>Social</h3>
+			<ul>
+				<li><a href="#">Weiqun Zhang</a></li>
+				<li><a href="#">Other wannabe</a></li>
+			</ul>
+			</div>
+		</div>
+	  </div>
+	  <div class="content">
+	<div class='page'>
+		<div class="page-header"><h1>SICP Exercise 1.07</h1></div>
+		<div><p>Code</p>
+<div class="highlight"><pre><span class="o">#</span><span class="nv">lang</span> <span class="nv">racket</span>
+
+<span class="p">(</span><span class="nf">require</span> <span class="s">&quot;common.scm&quot;</span><span class="p">)</span>
+
+<span class="c1">; first variant</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">sqrt-iter</span> <span class="nv">guess</span> <span class="nv">x</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">good-enough?</span> <span class="nv">guess</span> <span class="nv">x</span><span class="p">)</span>
+      <span class="nv">guess</span>
+      <span class="p">(</span><span class="nf">sqrt-iter</span> <span class="p">(</span><span class="nf">improve</span> <span class="nv">guess</span> <span class="nv">x</span><span class="p">)</span> <span class="nv">x</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">improve</span> <span class="nv">guess</span> <span class="nv">x</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">average</span> <span class="nv">guess</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">x</span> <span class="nv">guess</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">good-enough?</span> <span class="nv">guess</span> <span class="nv">x</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nb">abs </span><span class="p">(</span><span class="nb">- </span><span class="p">(</span><span class="nf">square</span> <span class="nv">guess</span><span class="p">)</span> <span class="nv">x</span><span class="p">))</span> <span class="mi">1</span><span class="nv">e-3</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">mysqrt</span> <span class="nv">x</span><span class="p">)</span> <span class="p">(</span><span class="nf">sqrt-iter</span> <span class="mf">1.0</span> <span class="nv">x</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">test</span> <span class="nv">radicand</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">define </span><span class="nv">calculated</span> <span class="p">(</span><span class="nf">mysqrt</span> <span class="nv">radicand</span><span class="p">))</span>
+  <span class="p">(</span><span class="k">define </span><span class="nv">exact</span> <span class="p">(</span><span class="nb">sqrt </span><span class="nv">radicand</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb">display </span><span class="s">&quot;radicand: &quot;</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">display </span><span class="nv">radicand</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">newline</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">display </span><span class="s">&quot;sqrt exact: &quot;</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">display </span><span class="nv">exact</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">newline</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">display </span><span class="s">&quot;sqrt calculated: &quot;</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">display </span><span class="nv">calculated</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">newline</span><span class="p">))</span>
+
+
+<span class="c1">; tests</span>
+
+<span class="p">(</span><span class="nf">test</span> <span class="mi">1</span><span class="nv">e-80</span><span class="p">)</span>
+
+<span class="c1">;(test 1e+80)</span>
+<span class="c1">; process doesn&#39;t stop</span>
+</pre></div>
+
+
+<p>Output</p>
+<div class="highlight"><pre>radicand: 1e-80
+sqrt exact: 1e-40
+sqrt calculated: 0.03125
+</pre></div>
+
+
+<p>The process stops when absolute error is small. For very small numbers
+the square of a small guess becomes less than 0.001 and the process
+stops too early, giving the wrong answer. For very large numbers and
+guesses the difference between two large numbers is always larger than
+0.001, exactly due to limited precision of decimal values, and the guess
+is infinitely improved.</p>
+<p>Code</p>
+<div class="highlight"><pre><span class="o">#</span><span class="nv">lang</span> <span class="nv">racket</span>
+
+<span class="p">(</span><span class="nf">require</span> <span class="s">&quot;common.scm&quot;</span><span class="p">)</span>
+
+<span class="c1">; second variant</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">sqrt-iter</span> <span class="nv">oldguess</span> <span class="nv">guess</span> <span class="nv">x</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">good-enough?</span> <span class="nv">oldguess</span> <span class="nv">guess</span><span class="p">)</span>
+      <span class="nv">guess</span>
+      <span class="p">(</span><span class="nf">sqrt-iter</span> <span class="nv">guess</span> <span class="p">(</span><span class="nf">improve</span> <span class="nv">guess</span> <span class="nv">x</span><span class="p">)</span> <span class="nv">x</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">improve</span> <span class="nv">guess</span> <span class="nv">x</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">average</span> <span class="nv">guess</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">x</span> <span class="nv">guess</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">good-enough?</span> <span class="nv">oldguess</span> <span class="nv">guess</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">abs </span><span class="p">(</span><span class="nb">- </span><span class="nv">oldguess</span> <span class="nv">guess</span><span class="p">))</span> <span class="nv">guess</span><span class="p">)</span> <span class="mi">1</span><span class="nv">e-10</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">mysqrt</span> <span class="nv">x</span><span class="p">)</span> <span class="p">(</span><span class="nf">sqrt-iter</span> <span class="mf">2.0</span> <span class="mf">1.0</span> <span class="nv">x</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">test</span> <span class="nv">radicand</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">define </span><span class="nv">calculated</span> <span class="p">(</span><span class="nf">mysqrt</span> <span class="nv">radicand</span><span class="p">))</span>
+  <span class="p">(</span><span class="k">define </span><span class="nv">exact</span> <span class="p">(</span><span class="nb">sqrt </span><span class="nv">radicand</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb">display </span><span class="s">&quot;radicand: &quot;</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">display </span><span class="nv">radicand</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">newline</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">display </span><span class="s">&quot;sqrt exact: &quot;</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">display </span><span class="nv">exact</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">newline</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">display </span><span class="s">&quot;sqrt calculated: &quot;</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">display </span><span class="nv">calculated</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">newline</span><span class="p">))</span>
+
+<span class="c1">; tests</span>
+
+<span class="p">(</span><span class="nf">test</span> <span class="mi">1</span><span class="nv">e-80</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">test</span> <span class="mi">1</span><span class="nv">e+80</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Output</p>
+<div class="highlight"><pre>radicand: 1e-80
+sqrt exact: 1e-40
+sqrt calculated: 1e-40
+radicand: 1e+80
+sqrt exact: 1e+40
+sqrt calculated: 9.999999999999999e+39
+</pre></div>
+
+
+<p>The process stops when relative error is small.</p></div>
+	</div>
+		<footer>
+		  <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme based on <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>.</p>
+		  <p>&copy; voom4000</p>
+		</footer>
+	  </div>
+
+	</div>
+</body>
+</html>

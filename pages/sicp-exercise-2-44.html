@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>voom & zoom</title>
+	<meta name="description" content="">
+	<meta name="author" content="voom4000">
+
+	<!-- HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="../theme/html5.js"></script>
+	<![endif]-->
+
+	<!-- Styles -->
+	<link href="../theme/bootstrap.min.css" rel="stylesheet">
+	<link href="../theme/local.css" rel="stylesheet">
+	<link href="../theme/pygments.css" rel="stylesheet">
+
+	<!-- Feeds -->
+
+
+
+
+</head>
+<body>
+	<div class="topbar">
+	  <div class="topbar-inner">
+		<div class="container-fluid">
+		  <a class="brand" href="../">voom & zoom</a>
+			<ul class="nav">
+			</ul>
+			<p class="pull-right"><a href="../archives.html">[archives]</a> <a href="../tags.html">[tags]</a></p>
+		</div>
+	  </div>
+	</div>
+
+	<div class="container-fluid">
+	  <div class="sidebar">
+		<div class="well">
+			<h3>Blogroll</h3>
+			<ul>
+				<li><a href="pages/sicp-solutions.html">SICP Solutions</a></li>
+			</ul>
+			<div class="social">
+			<h3>Social</h3>
+			<ul>
+				<li><a href="#">Weiqun Zhang</a></li>
+				<li><a href="#">Other wannabe</a></li>
+			</ul>
+			</div>
+		</div>
+	  </div>
+	  <div class="content">
+	<div class='page'>
+		<div class="page-header"><h1>SICP Exercise 2.44</h1></div>
+		<div><p>Code</p>
+<div class="highlight"><pre><span class="o">#</span><span class="nv">lang</span> <span class="nv">racket</span>
+
+<span class="p">(</span><span class="nf">require</span> <span class="s">&quot;picture.language.scm&quot;</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">require</span> <span class="s">&quot;picture.window.scm&quot;</span><span class="p">)</span>
+
+<span class="c1">; these definitions of right-split1 and up-split1</span>
+<span class="c1">; are according to the excercise</span>
+
+<span class="c1">; the file &quot;picture.language.scm&quot;</span>
+<span class="c1">; contains their different implementations</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">right-split1</span> <span class="nv">painter</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="nv">n</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="nv">painter</span>
+      <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">smaller</span> <span class="p">(</span><span class="nf">right-split1</span> <span class="nv">painter</span> <span class="p">(</span><span class="nb">- </span><span class="nv">n</span> <span class="mi">1</span><span class="p">))))</span>
+        <span class="p">(</span><span class="nf">beside</span> <span class="nv">painter</span> <span class="p">(</span><span class="nf">below</span> <span class="nv">smaller</span> <span class="nv">smaller</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">up-split1</span> <span class="nv">painter</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="nv">n</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="nv">painter</span>
+      <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">smaller</span> <span class="p">(</span><span class="nf">up-split1</span> <span class="nv">painter</span> <span class="p">(</span><span class="nb">- </span><span class="nv">n</span> <span class="mi">1</span><span class="p">))))</span>
+        <span class="p">(</span><span class="nf">below</span> <span class="nv">painter</span> <span class="p">(</span><span class="nf">beside</span> <span class="nv">smaller</span> <span class="nv">smaller</span><span class="p">)))))</span>
+
+<span class="c1">; tests</span>
+
+<span class="c1">;((right-split1 wave 4) unit-frame)</span>
+<span class="c1">;((up-split1 wave 4) unit-frame)</span>
+</pre></div>
+
+
+<p><img alt="Image1" src="/images/solutions/2.44.image1.png" /></p>
+<p><img alt="Image1" src="/images/solutions/2.44.image2.png" /></p></div>
+	</div>
+		<footer>
+		  <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme based on <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>.</p>
+		  <p>&copy; voom4000</p>
+		</footer>
+	  </div>
+
+	</div>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>voom & zoom</title>
+	<meta name="description" content="">
+	<meta name="author" content="voom4000">
+
+	<!-- HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="../theme/html5.js"></script>
+	<![endif]-->
+
+	<!-- Styles -->
+	<link href="../theme/bootstrap.min.css" rel="stylesheet">
+	<link href="../theme/local.css" rel="stylesheet">
+	<link href="../theme/pygments.css" rel="stylesheet">
+
+	<!-- Feeds -->
+
+
+
+
+</head>
+<body>
+	<div class="topbar">
+	  <div class="topbar-inner">
+		<div class="container-fluid">
+		  <a class="brand" href="../">voom & zoom</a>
+			<ul class="nav">
+			</ul>
+			<p class="pull-right"><a href="../archives.html">[archives]</a> <a href="../tags.html">[tags]</a></p>
+		</div>
+	  </div>
+	</div>
+
+	<div class="container-fluid">
+	  <div class="sidebar">
+		<div class="well">
+			<h3>Blogroll</h3>
+			<ul>
+				<li><a href="pages/sicp-solutions.html">SICP Solutions</a></li>
+			</ul>
+			<div class="social">
+			<h3>Social</h3>
+			<ul>
+				<li><a href="#">Weiqun Zhang</a></li>
+				<li><a href="#">Other wannabe</a></li>
+			</ul>
+			</div>
+		</div>
+	  </div>
+	  <div class="content">
+	<div class='page'>
+		<div class="page-header"><h1>SICP Exercise 2.16</h1></div>
+		<div><p>Let's take some expression, <span class="math">\(f(A,B,C,...)\)</span>, where intervals may
+occur several times. As W.Z. proposes, we can find the correct resulting
+interval by Monte-Carlo. All occurrences of e.g. <span class="math">\(A\)</span> in the formula should
+get the same value at every MC step (of course this value may be
+different for different MC steps). I especially like this method as not
+only it solves the problem of dependencies, but it finds the correct
+answer without any approximations.</p>
+<p>But how to find the correct resulting interval analytically?</p>
+<p>When formula is nonlinear, it may have an extremum inside an interval.</p>
+<p>Example:
+<span class="math">\(f(x)=(x-2)(x-4)\)</span> has a minimum <span class="math">\(-1\)</span> at <span class="math">\(x=3\)</span>.
+For an expression <span class="math">\((A-2)*(A-4)\)</span>, where <span class="math">\(A=(2, 4)\)</span>,
+Monte Carlo method gives <span class="math">\((-1,0)\)</span>.</p>
+<p>It is easy to build functions of intervals, that cannot be transformed
+to the form with only one occurrence of every independent interval.</p>
+<p>Example:
+<span class="math">\(f(x)=\frac{A+B}{A+C}\)</span></p>
+<p>In order to find the resulting interval we have to treat
+the expression with intervals as a real function of (probably several)
+real variables, and independent
+intervals define its domain. We should find global minimum and maximum
+of that function on that domain, either analytically or by Monte Carlo
+method, and these extrema are the answer, the resulting interval.
+We should not work with functions that have bad behavior anywhere in
+their domains. Good function is defined at any point of the domain and
+its border, it should be at least bounded for using Monte Carlo methods.
+In order to use analytical methods we should require more properties,
+e.g. the function of interval variables should be differentiable.</p>
+<p>In this method the problem of dependent intervals disappears, <span class="math">\(A/A\)</span> is
+always 1, and there is no difference between equivalent expressions like
+formulas for resistance in the book.</p>
+<p>This is the explanation of why SICP states that this problem is very
+difficult. Finding global extrema of a function of several variables IS
+very difficult per se. Analytical methods are not good when the number
+of variables (intervals) increases or when function has complex profile.
+You can find thousands of local minima and still not be sure that your
+running minimum is anywhere near the global minimum. Gradient methods
+also cannot guarantee anything. The last resort is Monte Carlo, but you
+can be unlucky with it :).</p>
+<p>The problem is difficult in general case but for many practical
+applications MC method works, and other numerical and analytical methods
+may work too.</p>
+<p>The practical answer to the exercise 2.16 is "Use Monte Carlo".</p>
+<h3>Repost of my comment on http://community.schemewiki.org</h3>
+<p>We have to leave the realm of interval arithmetic as soon as we start
+to talk about functions that have extrema somewhere inside intervals,
+or about functions like <span class="math">\((A+B)/(A+C)\)</span>, which in principle cannot be reduced
+to the form with one occurrence of each variable. This is the meaning of
+dependency problem. By using interval arithmetic we will always get wrong
+results for such functions. We cannot find correct answers using
+interval arithmetic, but we can find them by using
+analytical or numerical methods, e.g. Monte Carlo method.
+It’s the problem of finding global minimum of a function of several variables.
+I saw the proposal to use MC in Weiqun Zhang’s blog
+(in fact it is a standard method of finding extrema for very complex functions).
+MC works even when all analytical methods fail.
+Dependency problem does not exist for these methods.
+For example, when you calculate <span class="math">\(A/A\)</span> with Monte Carlo method,
+you just submit the same random value inside the interval to
+ALL occurrences of A in the formula, e.g. for <span class="math">\(A/A\)</span> the value of
+the function will be 1, no matter how many random values you generate.
+Do not work with intervals that span zero if you want to get
+correct result for that formula. Then you take the min/max of all
+function values (all of them were 1), and voila,
+final result is 1 with ZERO TOLERANCE or zero width.
+Well, you could cancel numerator and denominator from the very beginning,
+MC and analytical methods allow it.</p>
+<p>Code</p>
+<div class="highlight"><pre><span class="kn">import</span> <span class="nn">random</span>
+
+<span class="c"># intervals</span>
+<span class="n">intA</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">intB</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">intC</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">20.5</span><span class="p">)</span>
+
+<span class="c"># function of three intervals</span>
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">):</span>
+    <span class="c">#return (A+B)/(A+C)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">A</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">A</span> <span class="o">-</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="c"># calculation of the resulting interval</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">1000000</span>
+<span class="n">minf</span> <span class="o">=</span> <span class="mf">1e80</span>
+<span class="n">maxf</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1e80</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">intA</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">intA</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">intB</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">intB</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">intC</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">intC</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">minf</span> <span class="o">&gt;</span> <span class="n">res</span><span class="p">:</span> <span class="n">minf</span> <span class="o">=</span> <span class="n">res</span>
+    <span class="k">if</span> <span class="n">maxf</span> <span class="o">&lt;</span> <span class="n">res</span><span class="p">:</span> <span class="n">maxf</span> <span class="o">=</span> <span class="n">res</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;Monte-Carlo method&quot;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;min = </span><span class="si">%6.2f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">minf</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;max = </span><span class="si">%6.2f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">maxf</span><span class="p">))</span>
+</pre></div>
+
+
+<p>Output</p>
+<div class="highlight"><pre>Monte-Carlo method
+min =  -1.00
+max =  -0.00
+</pre></div>
+
+
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+    
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' && location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript'; 
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script></div>
+	</div>
+		<footer>
+		  <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme based on <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>.</p>
+		  <p>&copy; voom4000</p>
+		</footer>
+	  </div>
+
+	</div>
+</body>
+</html>

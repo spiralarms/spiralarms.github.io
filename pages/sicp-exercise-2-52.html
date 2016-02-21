@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>voom & zoom</title>
+	<meta name="description" content="">
+	<meta name="author" content="voom4000">
+
+	<!-- HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="../theme/html5.js"></script>
+	<![endif]-->
+
+	<!-- Styles -->
+	<link href="../theme/bootstrap.min.css" rel="stylesheet">
+	<link href="../theme/local.css" rel="stylesheet">
+	<link href="../theme/pygments.css" rel="stylesheet">
+
+	<!-- Feeds -->
+
+
+
+
+</head>
+<body>
+	<div class="topbar">
+	  <div class="topbar-inner">
+		<div class="container-fluid">
+		  <a class="brand" href="../">voom & zoom</a>
+			<ul class="nav">
+			</ul>
+			<p class="pull-right"><a href="../archives.html">[archives]</a> <a href="../tags.html">[tags]</a></p>
+		</div>
+	  </div>
+	</div>
+
+	<div class="container-fluid">
+	  <div class="sidebar">
+		<div class="well">
+			<h3>Blogroll</h3>
+			<ul>
+				<li><a href="pages/sicp-solutions.html">SICP Solutions</a></li>
+			</ul>
+			<div class="social">
+			<h3>Social</h3>
+			<ul>
+				<li><a href="#">Weiqun Zhang</a></li>
+				<li><a href="#">Other wannabe</a></li>
+			</ul>
+			</div>
+		</div>
+	  </div>
+	  <div class="content">
+	<div class='page'>
+		<div class="page-header"><h1>SICP Exercise 2.52</h1></div>
+		<div><p>Code</p>
+<div class="highlight"><pre><span class="o">#</span><span class="nv">lang</span> <span class="nv">racket</span>
+
+<span class="p">(</span><span class="nf">require</span> <span class="s">&quot;picture.language.scm&quot;</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">require</span> <span class="s">&quot;picture.window.scm&quot;</span><span class="p">)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">new-wave</span> <span class="nv">frame</span><span class="p">)</span>
+  <span class="p">((</span><span class="nf">segments-&gt;painter</span>
+    <span class="p">(</span><span class="nf">append</span>
+     <span class="p">(</span><span class="nf">connect</span> <span class="p">(</span><span class="nb">list </span><span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.41</span>  <span class="mf">0.01</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.51</span>  <span class="mf">0.32</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.61</span>  <span class="mf">0.01</span><span class="p">)))</span> <span class="c1">; inside legs</span>
+
+     <span class="p">(</span><span class="nf">connect</span> <span class="p">(</span><span class="nb">list </span><span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.24</span> <span class="mf">0.01</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.43</span> <span class="mf">0.54</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.31</span>  <span class="mf">0.56</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.11</span>  <span class="mf">0.51</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.01</span>  <span class="mf">0.64</span><span class="p">)))</span> <span class="c1">; lower left</span>
+
+     <span class="p">(</span><span class="nf">connect</span> <span class="p">(</span><span class="nb">list </span><span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.01</span>  <span class="mf">0.73</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.11</span>  <span class="mf">0.61</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.32</span> <span class="mf">0.67</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.46</span>  <span class="mf">0.64</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.41</span> <span class="mf">0.81</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.44</span>  <span class="mf">1.0</span><span class="p">)))</span> <span class="c1">; upper left</span>
+
+     <span class="p">(</span><span class="nf">connect</span> <span class="p">(</span><span class="nb">list </span><span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.74</span> <span class="mf">0.02</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.59</span>  <span class="mf">0.54</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.64</span>  <span class="mf">0.56</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">1.0</span>  <span class="mf">0.27</span><span class="p">)))</span> <span class="c1">; lower right</span>
+
+     <span class="p">(</span><span class="nf">connect</span> <span class="p">(</span><span class="nb">list </span><span class="p">(</span><span class="nf">make-vect</span> <span class="mf">1.0</span>  <span class="mf">0.36</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.67</span>  <span class="mf">0.67</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.55</span>  <span class="mf">0.66</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.61</span> <span class="mf">0.81</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.54</span>  <span class="mf">1.0</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.44</span>  <span class="mf">1.0</span><span class="p">)))</span> <span class="c1">; upper right</span>
+
+     <span class="p">(</span><span class="nf">connect</span> <span class="p">(</span><span class="nb">list </span><span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.47</span>  <span class="mf">0.7</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.5</span>  <span class="mf">0.69</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">make-vect</span> <span class="mf">0.53</span>  <span class="mf">0.7</span><span class="p">)</span>
+                    <span class="p">))))</span> <span class="c1">; smile</span>
+   <span class="nv">frame</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">new-corner-split</span> <span class="nv">painter</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="nv">n</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="nv">painter</span>
+      <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">up</span> <span class="p">(</span><span class="nf">up-split</span> <span class="nv">painter</span> <span class="p">(</span><span class="nb">- </span><span class="nv">n</span> <span class="mi">1</span><span class="p">)))</span>
+            <span class="p">(</span><span class="nf">right</span> <span class="p">(</span><span class="nf">right-split</span> <span class="nv">painter</span> <span class="p">(</span><span class="nb">- </span><span class="nv">n</span> <span class="mi">1</span><span class="p">))))</span>
+        <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">top-left</span> <span class="p">(</span><span class="nf">beside</span> <span class="nv">empty-painter</span> <span class="nv">up</span><span class="p">))</span>
+              <span class="p">(</span><span class="nf">bottom-right</span> <span class="p">(</span><span class="nf">below</span> <span class="nv">empty-painter</span> <span class="nv">right</span><span class="p">))</span>
+              <span class="p">(</span><span class="nf">corner</span> <span class="p">(</span><span class="nf">new-corner-split</span> <span class="nv">painter</span> <span class="p">(</span><span class="nb">- </span><span class="nv">n</span> <span class="mi">1</span><span class="p">))))</span>
+          <span class="p">(</span><span class="nf">beside</span> <span class="p">(</span><span class="nf">below</span> <span class="nv">painter</span> <span class="nv">top-left</span><span class="p">)</span>
+                  <span class="p">(</span><span class="nf">below</span> <span class="nv">bottom-right</span> <span class="nv">corner</span><span class="p">))))))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">new-square-limit</span> <span class="nv">painter</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">((</span><span class="nf">square-of-four</span> <span class="nv">rotate270</span> <span class="nv">rotate180</span> <span class="nv">identity</span> <span class="nv">rotate90</span><span class="p">)</span>
+   <span class="p">(</span><span class="nf">new-corner-split</span> <span class="nv">painter</span> <span class="nv">n</span><span class="p">)))</span>
+
+<span class="c1">; tests</span>
+
+<span class="c1">;((add-painters wave new-wave) unit-frame)</span>
+<span class="c1">;((new-corner-split wave 4) unit-frame)</span>
+<span class="c1">;((new-square-limit new-wave 4) unit-frame</span>
+</pre></div>
+
+
+<p><img alt="Image1" src="/images/solutions/2.52.image1.png" /></p>
+<p><img alt="Image1" src="/images/solutions/2.52.image2.png" /></p>
+<p><img alt="Image1" src="/images/solutions/2.52.image3.png" /></p></div>
+	</div>
+		<footer>
+		  <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme based on <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>.</p>
+		  <p>&copy; voom4000</p>
+		</footer>
+	  </div>
+
+	</div>
+</body>
+</html>

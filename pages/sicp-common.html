@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>voom & zoom</title>
+	<meta name="description" content="">
+	<meta name="author" content="voom4000">
+
+	<!-- HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="../theme/html5.js"></script>
+	<![endif]-->
+
+	<!-- Styles -->
+	<link href="../theme/bootstrap.min.css" rel="stylesheet">
+	<link href="../theme/local.css" rel="stylesheet">
+	<link href="../theme/pygments.css" rel="stylesheet">
+
+	<!-- Feeds -->
+
+
+
+
+</head>
+<body>
+	<div class="topbar">
+	  <div class="topbar-inner">
+		<div class="container-fluid">
+		  <a class="brand" href="../">voom & zoom</a>
+			<ul class="nav">
+			</ul>
+			<p class="pull-right"><a href="../archives.html">[archives]</a> <a href="../tags.html">[tags]</a></p>
+		</div>
+	  </div>
+	</div>
+
+	<div class="container-fluid">
+	  <div class="sidebar">
+		<div class="well">
+			<h3>Blogroll</h3>
+			<ul>
+				<li><a href="pages/sicp-solutions.html">SICP Solutions</a></li>
+			</ul>
+			<div class="social">
+			<h3>Social</h3>
+			<ul>
+				<li><a href="#">Weiqun Zhang</a></li>
+				<li><a href="#">Other wannabe</a></li>
+			</ul>
+			</div>
+		</div>
+	  </div>
+	  <div class="content">
+	<div class='page'>
+		<div class="page-header"><h1>Common procedures</h1></div>
+		<div><p>Code</p>
+<div class="highlight"><pre><span class="o">#</span><span class="nv">lang</span> <span class="nv">racket</span>
+
+<span class="c1">;; ch1</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">inc</span> <span class="nv">n</span><span class="p">)</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">n</span> <span class="mi">1</span><span class="p">))</span>
+<span class="p">(</span><span class="nf">provide</span> <span class="nv">inc</span><span class="p">)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">dec</span> <span class="nv">n</span><span class="p">)</span> <span class="p">(</span><span class="nb">- </span><span class="nv">n</span> <span class="mi">1</span><span class="p">))</span>
+<span class="p">(</span><span class="nf">provide</span> <span class="nv">dec</span><span class="p">)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">square</span> <span class="nv">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">* </span><span class="nv">x</span> <span class="nv">x</span><span class="p">))</span>
+<span class="p">(</span><span class="nf">provide</span> <span class="nv">square</span><span class="p">)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">cube</span> <span class="nv">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">* </span><span class="nv">x</span> <span class="nv">x</span> <span class="nv">x</span><span class="p">))</span>
+<span class="p">(</span><span class="nf">provide</span> <span class="nv">cube</span><span class="p">)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">divides?</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span> <span class="p">(</span><span class="nb">= </span><span class="p">(</span><span class="nb">remainder </span><span class="nv">b</span> <span class="nv">a</span><span class="p">)</span> <span class="mi">0</span><span class="p">))</span>
+<span class="p">(</span><span class="nf">provide</span> <span class="nv">divides?</span><span class="p">)</span>
+
+<span class="c1">;(define (compose f g) (lambda (x) (f (g x))))</span>
+<span class="c1">;(provide compose)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">average</span> <span class="nv">x</span> <span class="nv">y</span><span class="p">)</span> <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">+ </span><span class="nv">x</span> <span class="nv">y</span><span class="p">)</span> <span class="mi">2</span><span class="p">))</span>
+<span class="p">(</span><span class="nf">provide</span> <span class="nv">average</span><span class="p">)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">average-damp</span> <span class="nv">f</span><span class="p">)</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">x</span><span class="p">)</span> <span class="p">(</span><span class="nf">average</span> <span class="nv">x</span> <span class="p">(</span><span class="nf">f</span> <span class="nv">x</span><span class="p">))))</span>
+<span class="p">(</span><span class="nf">provide</span> <span class="nv">average-damp</span><span class="p">)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="nv">runtime</span> <span class="nv">current-seconds</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">provide</span> <span class="nv">runtime</span><span class="p">)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">pass</span><span class="p">)</span> <span class="p">(</span><span class="nb">display </span><span class="s">&quot;&quot;</span><span class="p">))</span>
+<span class="p">(</span><span class="nf">provide</span> <span class="nv">pass</span><span class="p">)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">expmod</span> <span class="nv">base</span> <span class="nv">exp</span> <span class="nv">m</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">= </span><span class="nv">exp</span> <span class="mi">0</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">((</span><span class="nb">even? </span><span class="nv">exp</span><span class="p">)</span>
+         <span class="p">(</span><span class="nb">remainder </span><span class="p">(</span><span class="nf">square</span> <span class="p">(</span><span class="nf">expmod</span> <span class="nv">base</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">exp</span> <span class="mi">2</span><span class="p">)</span> <span class="nv">m</span><span class="p">))</span>
+                    <span class="nv">m</span><span class="p">))</span>
+        <span class="p">(</span><span class="nf">else</span>
+         <span class="p">(</span><span class="nb">remainder </span><span class="p">(</span><span class="nb">* </span><span class="nv">base</span> <span class="p">(</span><span class="nf">expmod</span> <span class="nv">base</span> <span class="p">(</span><span class="nb">- </span><span class="nv">exp</span> <span class="mi">1</span><span class="p">)</span> <span class="nv">m</span><span class="p">))</span>
+                    <span class="nv">m</span><span class="p">))))</span>
+<span class="p">(</span><span class="nf">provide</span> <span class="nv">expmod</span><span class="p">)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fast-expt</span> <span class="nv">b</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">= </span><span class="nv">n</span> <span class="mi">0</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">((</span><span class="nb">even? </span><span class="nv">n</span><span class="p">)</span> <span class="p">(</span><span class="nf">square</span> <span class="p">(</span><span class="nf">fast-expt</span> <span class="nv">b</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">n</span> <span class="mi">2</span><span class="p">))))</span>
+        <span class="p">(</span><span class="k">else </span><span class="p">(</span><span class="nb">* </span><span class="nv">b</span> <span class="p">(</span><span class="nf">fast-expt</span> <span class="nv">b</span> <span class="p">(</span><span class="nb">- </span><span class="nv">n</span> <span class="mi">1</span><span class="p">))))))</span>
+<span class="p">(</span><span class="nf">provide</span> <span class="nv">fast-expt</span><span class="p">)</span>
+
+<span class="c1">;; ch2</span>
+
+<span class="p">(</span><span class="k">define </span><span class="nv">nil</span> <span class="o">&#39;</span><span class="p">()</span> <span class="p">)</span>
+<span class="p">(</span><span class="nf">provide</span> <span class="nv">nil</span><span class="p">)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">enumerate-tree</span> <span class="nv">tree</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">null? </span><span class="nv">tree</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">())</span>
+        <span class="p">((</span><span class="nb">not </span><span class="p">(</span><span class="nb">pair? </span><span class="nv">tree</span><span class="p">))</span> <span class="p">(</span><span class="nb">list </span><span class="nv">tree</span><span class="p">))</span>
+        <span class="p">(</span><span class="k">else </span><span class="p">(</span><span class="nb">append </span><span class="p">(</span><span class="nf">enumerate-tree</span> <span class="p">(</span><span class="nb">car </span><span class="nv">tree</span><span class="p">))</span>
+                      <span class="p">(</span><span class="nf">enumerate-tree</span> <span class="p">(</span><span class="nb">cdr </span><span class="nv">tree</span><span class="p">))))))</span>
+<span class="p">(</span><span class="nf">provide</span> <span class="nv">enumerate-tree</span><span class="p">)</span>
+
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">enumerate-interval</span> <span class="nv">low</span> <span class="nv">high</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">&gt; </span><span class="nv">low</span> <span class="nv">high</span><span class="p">)</span>
+      <span class="o">&#39;</span><span class="p">()</span>
+      <span class="p">(</span><span class="nb">cons </span><span class="nv">low</span> <span class="p">(</span><span class="nf">enumerate-interval</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">low</span> <span class="mi">1</span><span class="p">)</span> <span class="nv">high</span><span class="p">))))</span>
+<span class="p">(</span><span class="nf">provide</span> <span class="nv">enumerate-interval</span><span class="p">)</span>
+
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">accumulate</span> <span class="nv">op</span> <span class="nv">initial</span> <span class="nv">sequence</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">null? </span><span class="nv">sequence</span><span class="p">)</span>
+      <span class="nv">initial</span>
+      <span class="p">(</span><span class="nf">op</span> <span class="p">(</span><span class="nb">car </span><span class="nv">sequence</span><span class="p">)</span>
+          <span class="p">(</span><span class="nf">accumulate</span> <span class="nv">op</span> <span class="nv">initial</span> <span class="p">(</span><span class="nb">cdr </span><span class="nv">sequence</span><span class="p">)))))</span>
+<span class="p">(</span><span class="nf">provide</span> <span class="nv">accumulate</span><span class="p">)</span>
+
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">accumulate-n</span> <span class="nv">op</span> <span class="nv">initial</span> <span class="nv">sequences</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">null? </span><span class="p">(</span><span class="nb">car </span><span class="nv">sequences</span><span class="p">))</span>
+      <span class="o">&#39;</span><span class="p">()</span>
+      <span class="p">(</span><span class="nb">cons </span><span class="p">(</span><span class="nf">accumulate</span> <span class="nv">op</span> <span class="nv">initial</span> <span class="p">(</span><span class="nb">map </span><span class="nv">car</span> <span class="nv">sequences</span><span class="p">))</span>
+            <span class="p">(</span><span class="nf">accumulate-n</span> <span class="nv">op</span> <span class="nv">initial</span> <span class="p">(</span><span class="nb">map </span><span class="nv">cdr</span> <span class="nv">sequences</span><span class="p">)))))</span>
+<span class="p">(</span><span class="nf">provide</span> <span class="nv">accumulate-n</span><span class="p">)</span>
+
+<span class="c1">; 0+(1+(2+3))</span>
+<span class="p">(</span><span class="k">define </span><span class="nv">fold-right</span> <span class="nv">accumulate</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">provide</span> <span class="nv">fold-right</span><span class="p">)</span>
+
+<span class="c1">; ((0+1)+2)+3</span>
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fold-left</span> <span class="nv">op</span> <span class="nv">initial</span> <span class="nv">sequence</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">iter</span> <span class="nv">result</span> <span class="nv">rest</span><span class="p">)</span>
+    <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">null? </span><span class="nv">rest</span><span class="p">)</span>
+      <span class="nv">result</span>
+      <span class="p">(</span><span class="nf">iter</span> <span class="p">(</span><span class="nf">op</span> <span class="nv">result</span> <span class="p">(</span><span class="nb">car </span><span class="nv">rest</span><span class="p">))</span> <span class="p">(</span><span class="nb">cdr </span><span class="nv">rest</span><span class="p">))))</span>
+  <span class="p">(</span><span class="nf">iter</span> <span class="nv">initial</span> <span class="nv">sequence</span><span class="p">))</span>
+<span class="p">(</span><span class="nf">provide</span> <span class="nv">fold-left</span><span class="p">)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">flatmap</span> <span class="nv">proc</span> <span class="nv">seq</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">accumulate</span> <span class="nv">append</span> <span class="o">&#39;</span><span class="p">()</span> <span class="p">(</span><span class="nb">map </span><span class="nv">proc</span> <span class="nv">seq</span><span class="p">)))</span>
+<span class="p">(</span><span class="nf">provide</span> <span class="nv">flatmap</span><span class="p">)</span>
+</pre></div></div>
+	</div>
+		<footer>
+		  <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme based on <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>.</p>
+		  <p>&copy; voom4000</p>
+		</footer>
+	  </div>
+
+	</div>
+</body>
+</html>

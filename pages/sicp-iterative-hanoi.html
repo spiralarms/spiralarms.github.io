@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>voom & zoom</title>
+	<meta name="description" content="">
+	<meta name="author" content="voom4000">
+
+	<!-- HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="../theme/html5.js"></script>
+	<![endif]-->
+
+	<!-- Styles -->
+	<link href="../theme/bootstrap.min.css" rel="stylesheet">
+	<link href="../theme/local.css" rel="stylesheet">
+	<link href="../theme/pygments.css" rel="stylesheet">
+
+	<!-- Feeds -->
+
+
+
+
+</head>
+<body>
+	<div class="topbar">
+	  <div class="topbar-inner">
+		<div class="container-fluid">
+		  <a class="brand" href="../">voom & zoom</a>
+			<ul class="nav">
+			</ul>
+			<p class="pull-right"><a href="../archives.html">[archives]</a> <a href="../tags.html">[tags]</a></p>
+		</div>
+	  </div>
+	</div>
+
+	<div class="container-fluid">
+	  <div class="sidebar">
+		<div class="well">
+			<h3>Blogroll</h3>
+			<ul>
+				<li><a href="pages/sicp-solutions.html">SICP Solutions</a></li>
+			</ul>
+			<div class="social">
+			<h3>Social</h3>
+			<ul>
+				<li><a href="#">Weiqun Zhang</a></li>
+				<li><a href="#">Other wannabe</a></li>
+			</ul>
+			</div>
+		</div>
+	  </div>
+	  <div class="content">
+	<div class='page'>
+		<div class="page-header"><h1>Iterative Tower of Hanoi</h1></div>
+		<div><p>As Dr. Sussman promised, it was fun!</p>
+<p>Code</p>
+<div class="highlight"><pre><span class="o">#</span><span class="nv">lang</span> <span class="nv">racket</span>
+
+<span class="c1">; Iterative tower of Hanoi algorithm</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">print-move</span> <span class="nv">n</span> <span class="nv">from</span> <span class="nv">to</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">display </span><span class="nv">from</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">display </span><span class="s">&quot; -&gt; &quot;</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">display </span><span class="nv">to</span><span class="p">)</span>
+  <span class="c1">;(display &quot;  &quot;)</span>
+  <span class="c1">;(display n)</span>
+  <span class="p">(</span><span class="nf">newline</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">iter-hanoi</span> <span class="nv">height</span> <span class="nv">from</span> <span class="nv">to</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">iter</span> <span class="nv">nold</span> <span class="nv">n</span> <span class="nv">f</span> <span class="nv">t</span><span class="p">)</span>
+    <span class="p">(</span><span class="nf">cond</span>
+      <span class="p">((</span><span class="nb">= </span><span class="nv">n</span> <span class="mi">0</span><span class="p">)</span> <span class="s">&quot;done&quot;</span><span class="p">)</span>
+      <span class="p">(</span><span class="nf">else</span>
+       <span class="p">(</span><span class="k">define </span><span class="nv">leaf?</span> <span class="p">(</span><span class="nb">&gt;= </span><span class="nv">n</span> <span class="p">(</span><span class="nb">expt </span><span class="mi">2</span> <span class="p">(</span><span class="nb">- </span><span class="nv">height</span> <span class="mi">1</span><span class="p">))))</span> 
+       <span class="p">(</span><span class="k">define </span><span class="nv">s</span> <span class="p">(</span><span class="nb">- </span><span class="mi">6</span> <span class="nv">f</span> <span class="nv">t</span><span class="p">))</span> <span class="c1">; spare rod</span>
+       <span class="p">(</span><span class="k">cond </span><span class="p">(</span><span class="nf">leaf?</span> <span class="p">(</span><span class="nf">print-move</span> <span class="nv">n</span> <span class="nv">f</span> <span class="nv">t</span><span class="p">)))</span>
+       <span class="p">(</span><span class="nf">cond</span>
+         <span class="p">((</span><span class="k">and </span><span class="p">(</span><span class="nb">not </span><span class="nv">leaf?</span><span class="p">)</span> <span class="p">(</span><span class="nb">&gt; </span><span class="nv">n</span> <span class="nv">nold</span><span class="p">))</span> <span class="p">(</span><span class="nf">iter</span> <span class="nv">n</span> <span class="p">(</span><span class="nb">* </span><span class="nv">n</span> <span class="mi">2</span><span class="p">)</span> <span class="nv">f</span> <span class="nv">s</span><span class="p">))</span>
+         <span class="p">((</span><span class="k">and </span><span class="p">(</span><span class="nb">&lt; </span><span class="nv">n</span> <span class="nv">nold</span><span class="p">)</span> <span class="p">(</span><span class="nb">even? </span><span class="nv">nold</span><span class="p">))</span> <span class="p">(</span><span class="nf">print-move</span> <span class="nv">n</span> <span class="nv">f</span> <span class="nv">t</span><span class="p">)</span> <span class="p">(</span><span class="nf">iter</span> <span class="nv">n</span> <span class="p">(</span><span class="nb">+ </span><span class="mi">1</span> <span class="p">(</span><span class="nb">* </span><span class="nv">n</span> <span class="mi">2</span><span class="p">))</span> <span class="nv">s</span> <span class="nv">t</span><span class="p">))</span>
+         <span class="p">(</span><span class="nf">else</span>
+          <span class="p">(</span><span class="nf">if</span>
+           <span class="p">(</span><span class="nb">even? </span><span class="nv">n</span><span class="p">)</span>
+           <span class="p">(</span><span class="nf">iter</span> <span class="nv">n</span> <span class="p">(</span><span class="nb">quotient </span><span class="nv">n</span> <span class="mi">2</span><span class="p">)</span> <span class="nv">f</span> <span class="nv">s</span><span class="p">)</span>
+           <span class="p">(</span><span class="nf">iter</span> <span class="nv">n</span> <span class="p">(</span><span class="nb">quotient </span><span class="nv">n</span> <span class="mi">2</span><span class="p">)</span> <span class="nv">s</span> <span class="nv">t</span><span class="p">)))))))</span>
+  <span class="p">(</span><span class="nf">iter</span> <span class="mi">0</span> <span class="mi">1</span> <span class="nv">from</span> <span class="nv">to</span><span class="p">))</span>
+
+<span class="c1">; rods: 1, 2, 3</span>
+<span class="c1">; move four disks from the first to the third rod</span>
+<span class="p">(</span><span class="nf">iter-hanoi</span> <span class="mi">4</span> <span class="mi">1</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Output</p>
+<div class="highlight"><pre>1 -&gt; 2
+1 -&gt; 3
+2 -&gt; 3
+1 -&gt; 2
+3 -&gt; 1
+3 -&gt; 2
+1 -&gt; 2
+1 -&gt; 3
+2 -&gt; 3
+2 -&gt; 1
+3 -&gt; 1
+2 -&gt; 3
+1 -&gt; 2
+1 -&gt; 3
+2 -&gt; 3
+&quot;done&quot;
+</pre></div></div>
+	</div>
+		<footer>
+		  <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme based on <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>.</p>
+		  <p>&copy; voom4000</p>
+		</footer>
+	  </div>
+
+	</div>
+</body>
+</html>

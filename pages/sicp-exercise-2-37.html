@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>voom & zoom</title>
+	<meta name="description" content="">
+	<meta name="author" content="voom4000">
+
+	<!-- HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="../theme/html5.js"></script>
+	<![endif]-->
+
+	<!-- Styles -->
+	<link href="../theme/bootstrap.min.css" rel="stylesheet">
+	<link href="../theme/local.css" rel="stylesheet">
+	<link href="../theme/pygments.css" rel="stylesheet">
+
+	<!-- Feeds -->
+
+
+
+
+</head>
+<body>
+	<div class="topbar">
+	  <div class="topbar-inner">
+		<div class="container-fluid">
+		  <a class="brand" href="../">voom & zoom</a>
+			<ul class="nav">
+			</ul>
+			<p class="pull-right"><a href="../archives.html">[archives]</a> <a href="../tags.html">[tags]</a></p>
+		</div>
+	  </div>
+	</div>
+
+	<div class="container-fluid">
+	  <div class="sidebar">
+		<div class="well">
+			<h3>Blogroll</h3>
+			<ul>
+				<li><a href="pages/sicp-solutions.html">SICP Solutions</a></li>
+			</ul>
+			<div class="social">
+			<h3>Social</h3>
+			<ul>
+				<li><a href="#">Weiqun Zhang</a></li>
+				<li><a href="#">Other wannabe</a></li>
+			</ul>
+			</div>
+		</div>
+	  </div>
+	  <div class="content">
+	<div class='page'>
+		<div class="page-header"><h1>SICP Exercise 2.37</h1></div>
+		<div><p>Code</p>
+<div class="highlight"><pre><span class="o">#</span><span class="nv">lang</span> <span class="nv">racket</span>
+
+<span class="p">(</span><span class="nf">require</span> <span class="s">&quot;common.scm&quot;</span><span class="p">)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">dot-product</span> <span class="nv">v</span> <span class="nv">w</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">accumulate</span> <span class="nv">+</span> <span class="mi">0</span> <span class="p">(</span><span class="nb">map </span><span class="nv">*</span> <span class="nv">v</span> <span class="nv">w</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">matrix-*-vector</span> <span class="nv">m</span> <span class="nv">v</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">map </span><span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">row</span><span class="p">)</span> <span class="p">(</span><span class="nf">dot-product</span> <span class="nv">row</span> <span class="nv">v</span><span class="p">))</span> <span class="nv">m</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">transpose</span> <span class="nv">m</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">accumulate-n</span> <span class="nv">cons</span> <span class="o">&#39;</span><span class="p">()</span> <span class="nv">m</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">matrix-*-matrix</span> <span class="nv">m</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">cols</span> <span class="p">(</span><span class="nf">transpose</span> <span class="nv">n</span><span class="p">)))</span>
+    <span class="p">(</span><span class="nf">map</span>
+     <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">rowa</span><span class="p">)</span> <span class="p">(</span><span class="nb">map </span><span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">rowb</span><span class="p">)</span> <span class="p">(</span><span class="nf">dot-product</span> <span class="nv">rowa</span> <span class="nv">rowb</span><span class="p">))</span> <span class="nv">cols</span><span class="p">))</span>
+     <span class="nv">m</span><span class="p">)))</span>
+
+<span class="c1">; tests</span>
+
+<span class="p">(</span><span class="k">define </span><span class="nv">m1</span> <span class="p">(</span><span class="nb">list </span><span class="p">(</span><span class="nb">list </span><span class="mi">1</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">)</span> <span class="p">(</span><span class="nb">list </span><span class="mi">0</span> <span class="mi">1</span> <span class="mi">0</span><span class="p">)</span> <span class="p">(</span><span class="nb">list </span><span class="mi">0</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">)))</span>
+<span class="p">(</span><span class="k">define </span><span class="nv">v1</span> <span class="p">(</span><span class="nb">list </span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">))</span>
+<span class="p">(</span><span class="nf">matrix-*-vector</span> <span class="nv">m1</span> <span class="nv">v1</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">newline</span><span class="p">)</span>
+<span class="p">(</span><span class="k">define </span><span class="nv">m2</span> <span class="p">(</span><span class="nb">list </span><span class="p">(</span><span class="nb">list </span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">)</span> <span class="p">(</span><span class="nb">list </span><span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span><span class="p">)</span> <span class="p">(</span><span class="nb">list </span><span class="mi">7</span> <span class="mi">8</span> <span class="mi">9</span><span class="p">)))</span>
+<span class="p">(</span><span class="nf">transpose</span> <span class="nv">m2</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">newline</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">matrix-*-matrix</span> <span class="nv">m1</span> <span class="nv">m1</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">matrix-*-matrix</span> <span class="nv">m1</span> <span class="nv">m2</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">matrix-*-matrix</span> <span class="nv">m2</span> <span class="nv">m1</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">matrix-*-matrix</span> <span class="nv">m2</span> <span class="nv">m2</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Output</p>
+<div class="highlight"><pre>&#39;(1 2 3)
+
+&#39;((1 4 7) (2 5 8) (3 6 9))
+
+&#39;((1 0 0) (0 1 0) (0 0 1))
+&#39;((1 2 3) (4 5 6) (7 8 9))
+&#39;((1 2 3) (4 5 6) (7 8 9))
+&#39;((30 36 42) (66 81 96) (102 126 150))
+</pre></div></div>
+	</div>
+		<footer>
+		  <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme based on <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>.</p>
+		  <p>&copy; voom4000</p>
+		</footer>
+	  </div>
+
+	</div>
+</body>
+</html>

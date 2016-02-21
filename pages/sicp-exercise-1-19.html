@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>voom & zoom</title>
+	<meta name="description" content="">
+	<meta name="author" content="voom4000">
+
+	<!-- HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="../theme/html5.js"></script>
+	<![endif]-->
+
+	<!-- Styles -->
+	<link href="../theme/bootstrap.min.css" rel="stylesheet">
+	<link href="../theme/local.css" rel="stylesheet">
+	<link href="../theme/pygments.css" rel="stylesheet">
+
+	<!-- Feeds -->
+
+
+
+
+</head>
+<body>
+	<div class="topbar">
+	  <div class="topbar-inner">
+		<div class="container-fluid">
+		  <a class="brand" href="../">voom & zoom</a>
+			<ul class="nav">
+			</ul>
+			<p class="pull-right"><a href="../archives.html">[archives]</a> <a href="../tags.html">[tags]</a></p>
+		</div>
+	  </div>
+	</div>
+
+	<div class="container-fluid">
+	  <div class="sidebar">
+		<div class="well">
+			<h3>Blogroll</h3>
+			<ul>
+				<li><a href="pages/sicp-solutions.html">SICP Solutions</a></li>
+			</ul>
+			<div class="social">
+			<h3>Social</h3>
+			<ul>
+				<li><a href="#">Weiqun Zhang</a></li>
+				<li><a href="#">Other wannabe</a></li>
+			</ul>
+			</div>
+		</div>
+	  </div>
+	  <div class="content">
+	<div class='page'>
+		<div class="page-header"><h1>SICP Exercise 1.19</h1></div>
+		<div><p>Code</p>
+<div class="highlight"><pre><span class="o">#</span><span class="nv">lang</span> <span class="nv">racket</span>
+
+<span class="p">(</span><span class="nf">require</span> <span class="s">&quot;common.scm&quot;</span><span class="p">)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fast-fib</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">fib-iter</span> <span class="mi">1</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">1</span> <span class="nv">n</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fib-iter</span> <span class="nv">a</span> <span class="nv">b</span> <span class="nv">p</span> <span class="nv">q</span> <span class="nv">count</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">display </span><span class="nv">count</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">newline</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">= </span><span class="nv">count</span> <span class="mi">0</span><span class="p">)</span> <span class="nv">b</span><span class="p">)</span>
+        <span class="p">((</span><span class="nb">even? </span><span class="nv">count</span><span class="p">)</span>
+         <span class="p">(</span><span class="nf">fib-iter</span> <span class="nv">a</span>
+                   <span class="nv">b</span>
+                   <span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nf">square</span> <span class="nv">p</span><span class="p">)</span> <span class="p">(</span><span class="nf">square</span> <span class="nv">q</span><span class="p">))</span> <span class="c1">; compute p&#39;</span>
+                   <span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nb">* </span><span class="mi">2</span> <span class="nv">p</span> <span class="nv">q</span><span class="p">)</span> <span class="p">(</span><span class="nf">square</span> <span class="nv">q</span><span class="p">))</span>  <span class="c1">; compute q&#39;</span>
+                   <span class="p">(</span><span class="nb">/ </span><span class="nv">count</span> <span class="mi">2</span><span class="p">)))</span>
+        <span class="p">(</span><span class="k">else </span><span class="p">(</span><span class="nf">fib-iter</span> <span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nb">* </span><span class="nv">b</span> <span class="nv">q</span><span class="p">)</span> <span class="p">(</span><span class="nb">* </span><span class="nv">a</span> <span class="nv">q</span><span class="p">)</span> <span class="p">(</span><span class="nb">* </span><span class="nv">a</span> <span class="nv">p</span><span class="p">))</span>
+                        <span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nb">* </span><span class="nv">b</span> <span class="nv">p</span><span class="p">)</span> <span class="p">(</span><span class="nb">* </span><span class="nv">a</span> <span class="nv">q</span><span class="p">))</span>
+                        <span class="nv">p</span>
+                        <span class="nv">q</span>
+                        <span class="p">(</span><span class="nb">- </span><span class="nv">count</span> <span class="mi">1</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">iter-fib</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">fib-iter1</span> <span class="mi">1</span> <span class="mi">0</span> <span class="nv">n</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fib-iter1</span> <span class="nv">a</span> <span class="nv">b</span> <span class="nv">count</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">display </span><span class="nv">count</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">newline</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="nv">count</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="nv">b</span>
+      <span class="p">(</span><span class="nf">fib-iter1</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">a</span> <span class="nv">b</span><span class="p">)</span> <span class="nv">a</span> <span class="p">(</span><span class="nb">- </span><span class="nv">count</span> <span class="mi">1</span><span class="p">))))</span>
+
+<span class="c1">; tests</span>
+
+<span class="p">(</span><span class="nf">fast-fib</span> <span class="mi">30</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">newline</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">iter-fib</span> <span class="mi">30</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Output</p>
+<div class="highlight"><pre>30
+15
+14
+7
+6
+3
+2
+1
+0
+832040
+
+30
+29
+28
+27
+26
+25
+24
+23
+22
+21
+20
+19
+18
+17
+16
+15
+14
+13
+12
+11
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+0
+832040
+</pre></div>
+
+
+<p>Group theory in action.</p></div>
+	</div>
+		<footer>
+		  <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme based on <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>.</p>
+		  <p>&copy; voom4000</p>
+		</footer>
+	  </div>
+
+	</div>
+</body>
+</html>
