@@ -1,6 +1,6 @@
 /output/*
 /pelican-plugins/*
 /pelican-themes/*
-!/pelican-themes/bootstrap
-!/pelican-plugins/render_math
+!/pelican-themes/bootstrap/*
+!/pelican-plugins/render_math/*
 
