@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>voom & zoom</title>
+	<meta name="description" content="">
+	<meta name="author" content="voom4000">
+
+	<!-- HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="../theme/html5.js"></script>
+	<![endif]-->
+
+	<!-- Styles -->
+	<link href="../theme/bootstrap.min.css" rel="stylesheet">
+	<link href="../theme/local.css" rel="stylesheet">
+	<link href="../theme/pygments.css" rel="stylesheet">
+
+	<!-- Feeds -->
+
+
+
+
+</head>
+<body>
+	<div class="topbar">
+	  <div class="topbar-inner">
+		<div class="container-fluid">
+		  <a class="brand" href="../">voom & zoom</a>
+			<ul class="nav">
+			</ul>
+			<p class="pull-right"><a href="../archives.html">[archives]</a> <a href="../tags.html">[tags]</a></p>
+		</div>
+	  </div>
+	</div>
+
+	<div class="container-fluid">
+	  <div class="sidebar">
+		<div class="well">
+			<h3>Blogroll</h3>
+			<ul>
+				<li><a href="pages/sicp-solutions.html">SICP Solutions</a></li>
+			</ul>
+			<div class="social">
+			<h3>Social</h3>
+			<ul>
+				<li><a href="#">Weiqun Zhang</a></li>
+				<li><a href="#">Other wannabe</a></li>
+			</ul>
+			</div>
+		</div>
+	  </div>
+	  <div class="content">
+	<div class='page'>
+		<div class="page-header"><h1>Counting change</h1></div>
+		<div><p>SICP (p. 53) invites us to find an iterative algorithm for counting
+change. I was not able to do it using Scheme. Here are two algorithms
+in Python.</p>
+<p>The first one uses memoization for turning tree-recursive process to
+much more effective one, as explained in the book. It works as
+advertised.</p>
+<p>Code</p>
+<div class="highlight"><pre><span class="c"># recursive counting change with memoization</span>
+<span class="c"># super optimal algorithm</span>
+
+<span class="c"># amount</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="c"># denominations</span>
+<span class="n">m</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">50</span><span class="p">]</span>
+
+<span class="c"># storage for memoization</span>
+<span class="n">dictionary</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="n">calls</span> <span class="o">=</span> <span class="mi">0</span> <span class="c"># number of calls</span>
+<span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span> <span class="c"># current tree depth</span>
+<span class="n">maxdepth</span> <span class="o">=</span> <span class="mi">0</span> <span class="c"># maximal tree depth</span>
+
+<span class="k">def</span> <span class="nf">memo_change</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">kinds</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">dictionary</span>
+    <span class="k">global</span> <span class="n">calls</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">maxdepth</span>
+
+    <span class="n">pair</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">kinds</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">dictionary</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">dictionary</span><span class="p">[</span><span class="n">pair</span><span class="p">]</span>
+
+    <span class="n">depth</span> <span class="o">=</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">maxdepth</span> <span class="o">&lt;</span> <span class="n">depth</span><span class="p">:</span>
+        <span class="n">maxdepth</span> <span class="o">=</span> <span class="n">depth</span>
+    <span class="n">calls</span> <span class="o">=</span> <span class="n">calls</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="n">ways1</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">m</span><span class="p">[</span><span class="n">kinds</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">ways1</span> <span class="o">=</span> <span class="n">memo_change</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">m</span><span class="p">[</span><span class="n">kinds</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">kinds</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="n">m</span><span class="p">[</span><span class="n">kinds</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">ways1</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">ways2</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">kinds</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
+        <span class="n">ways2</span> <span class="o">=</span> <span class="n">memo_change</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">kinds</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">a</span> <span class="o">%</span> <span class="n">m</span><span class="p">[</span><span class="n">kinds</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ways2</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">ways</span> <span class="o">=</span> <span class="n">ways1</span> <span class="o">+</span> <span class="n">ways2</span>
+
+    <span class="n">dictionary</span><span class="p">[</span><span class="n">pair</span><span class="p">]</span> <span class="o">=</span> <span class="n">ways</span>
+
+    <span class="n">depth</span> <span class="o">=</span> <span class="n">depth</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">ways</span>
+
+
+<span class="k">print</span> <span class="s">&quot;amount = &quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="s">&quot;  ways = &quot;</span><span class="p">,</span> <span class="n">memo_change</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">m</span><span class="p">)),</span> \
+<span class="s">&quot;  calls = &quot;</span><span class="p">,</span> <span class="n">calls</span><span class="p">,</span> <span class="s">&quot;  max depth = &quot;</span><span class="p">,</span> <span class="n">maxdepth</span>
+</pre></div>
+
+
+<p>Output</p>
+<div class="highlight"><pre>amount =  100   ways =  292   calls =  44   max depth =  8
+</pre></div>
+
+
+<p>So far so good. Is it possible to invent something more iterative
+and not use additional data structure? Hmmm...</p>
+<p>Code</p>
+<div class="highlight"><pre><span class="c"># iterative counting change</span>
+<span class="c"># optimal algorithm with finding every variant of change</span>
+<span class="c"># but how to implement these nested loops in scheme?</span>
+
+<span class="c"># amount</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="c"># denominations</span>
+<span class="n">m</span> <span class="o">=</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c"># number of calls</span>
+<span class="n">calls</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">def</span> <span class="nf">iter_change</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">calls</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i0</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">a</span><span class="o">//</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="n">a</span> <span class="o">-</span> <span class="n">i0</span><span class="o">*</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">//</span><span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i2</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="n">a</span> <span class="o">-</span> <span class="p">(</span><span class="n">i0</span><span class="o">*</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">i1</span><span class="o">*</span><span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">//</span><span class="n">m</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">i3</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="n">a</span> <span class="o">-</span> <span class="p">(</span><span class="n">i0</span><span class="o">*</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">i1</span><span class="o">*</span><span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">i2</span><span class="o">*</span><span class="n">m</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span><span class="o">//</span><span class="n">m</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="p">(</span><span class="n">i0</span><span class="o">*</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">i1</span><span class="o">*</span><span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">i2</span><span class="o">*</span><span class="n">m</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">i3</span><span class="o">*</span><span class="n">m</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span> <span class="o">%</span> <span class="n">m</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="n">calls</span> <span class="o">=</span> <span class="n">calls</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">count</span>
+
+<span class="k">print</span> <span class="s">&quot;amount = &quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="s">&quot;  ways of change = &quot;</span><span class="p">,</span> <span class="n">iter_change</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="s">&quot;  calls = &quot;</span><span class="p">,</span> <span class="n">calls</span>
+<span class="c">#number of calls ~ amount^(n-1), where n=len(m)</span>
+</pre></div>
+
+
+<p>Output</p>
+<div class="highlight"><pre>amount =  100   ways of change =  292   calls =  292
+</pre></div>
+
+
+<p>We see that this algorithm is optimal in the sense it visits every way
+to change amount only once and it doesn't waste time trying wrong ways.
+But all four loops are hardcoded. The last, fifth, loop is replaced
+by slightly more complex condition check.</p></div>
+	</div>
+		<footer>
+		  <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme based on <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>.</p>
+		  <p>&copy; voom4000</p>
+		</footer>
+	  </div>
+
+	</div>
+</body>
+</html>
